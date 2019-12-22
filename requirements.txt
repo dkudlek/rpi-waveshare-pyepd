@@ -1,0 +1,5 @@
+numpy
+pathlib
+pillow
+RPi.GPIO
+spidev
