@@ -7,8 +7,7 @@ from pathlib import Path
 
 import logging
 logging.basicConfig(level = logging.DEBUG)
-import waveshare_pyepd
-from waveshare_pyepd import display_variants
+from rpi_waveshare_pyepd import display_variants, epd_calibrate, epd_show
 
 def rotate(image, orientation):
     if orientation == "p":
@@ -40,7 +39,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='print image on eink.')
     parser.add_argument('--type', type=str, default='epd7in5',
                         help=possible_diplays)
-    parser.add_argument('--source_file', type=Path, default=Path('black.png'),
+    parser.add_argument('source_file', type=Path,
                         help='current screenshot')
     parser.add_argument('--orientation', type=str, choices=["p", "pf", "l", "lf"],
                         default='p', help= ('orientation of source_image: p = portrait, ' +
@@ -48,7 +47,7 @@ if __name__ == '__main__':
                         'lf = landscape flipped'))
     args = parser.parse_args()
     image = Image.open(str(args.source_file)).convert("RGB")
-    rotate(image, args.orientation)
+    image = rotate(image, args.orientation)
 
-    waveshare_pyepd.epd_calibrate(args.type)
-    waveshare_pyepd.epd_show(image, args.type)
+    epd_calibrate(args.type)
+    epd_show(image, args.type)
